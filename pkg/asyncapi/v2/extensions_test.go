@@ -1,6 +1,7 @@
 package asyncapiv2
 
 import (
+	"encoding/json"
 	"sort"
 	"testing"
 
@@ -231,4 +232,17 @@ func (suite *ExtensionsSuite) TextExtGoTypeImportWithConflictingPackageNames() {
 
 	// It should be an error
 	suite.Require().Error(err)
+}
+
+func (suite *ExtensionsSuite) TestExtraExtensionsUnmarshal() {
+	// Schema with custom x-* keys should have them in ExtraExtensions
+	data := []byte(`{"type":"string","x-custom-tag":"myvalue","x-another":123}`)
+	var s Schema
+	err := json.Unmarshal(data, &s)
+	suite.Require().NoError(err)
+	suite.Require().NotNil(s.ExtraExtensions)
+	suite.Require().Equal("myvalue", s.ExtraExtensions["x-custom-tag"])
+	suite.Require().Equal(float64(123), s.ExtraExtensions["x-another"])
+	// Known extensions should not be in ExtraExtensions
+	suite.Require().NotContains(s.ExtraExtensions, "x-go-type")
 }

@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -152,6 +153,42 @@ func ForcePointerOnFields() {
 	}
 }
 
+// GenerateExtraExtensionTags returns struct tag string for schema ExtraExtensions (x-* keys).
+// Keys are emitted without the "x-" prefix (e.g. x-custom-tag becomes custom-tag:"value").
+func GenerateExtraExtensionTags(schema asyncapi.Schema) string {
+	if len(schema.ExtraExtensions) == 0 {
+		return ""
+	}
+	var parts []string
+	for k, v := range schema.ExtraExtensions {
+		tagName := strings.TrimPrefix(k, "x-")
+		if tagName == "" {
+			continue
+		}
+		var valStr string
+		switch v := v.(type) {
+		case string:
+			valStr = v
+		case bool, float64, int, int64:
+			valStr = fmt.Sprint(v)
+		default:
+			b, err := json.Marshal(v)
+			if err != nil {
+				valStr = fmt.Sprint(v)
+			} else {
+				valStr = string(b)
+			}
+		}
+		escaped := strings.ReplaceAll(valStr, "\\", "\\\\")
+		escaped = strings.ReplaceAll(escaped, "\"", "\\\"")
+		parts = append(parts, fmt.Sprintf("%s:\"%s\"", tagName, escaped))
+	}
+	if len(parts) == 0 {
+		return ""
+	}
+	return " " + strings.Join(parts, " ")
+}
+
 // HelpersFunctions returns the functions that can be used as helpers
 // in a golang template.
 func HelpersFunctions() template.FuncMap {
@@ -166,5 +203,6 @@ func HelpersFunctions() template.FuncMap {
 		"referenceToTypeName":            ReferenceToTypeName,
 		"generateValidateTags":           generators.GenerateValidateTags[asyncapi.Schema],
 		"generateJSONTags":               generators.GenerateJSONTags[asyncapi.Schema],
+		"generateExtraExtensionTags":     GenerateExtraExtensionTags,
 	}
 }

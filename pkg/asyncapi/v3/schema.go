@@ -1,6 +1,9 @@
 package asyncapiv3
 
 import (
+	"encoding/json"
+	"strings"
+
 	"github.com/lerenn/asyncapi-codegen/pkg/asyncapi"
 	"github.com/lerenn/asyncapi-codegen/pkg/utils"
 )
@@ -76,6 +79,46 @@ func NewSchema() Schema {
 			Required: make([]string, 0),
 		},
 	}
+}
+
+// knownExtensionKeys are x-* keys handled by Extensions; others go to ExtraExtensions.
+var knownExtensionKeys = map[string]bool{
+	"x-go-type":        true,
+	"x-go-type-import": true,
+	"x-omitempty":      true,
+}
+
+// UnmarshalJSON implements json.Unmarshaler so that any x-* key not in Extensions
+// is stored in ExtraExtensions and can be used during code generation.
+func (s *Schema) UnmarshalJSON(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	extra := make(map[string]any)
+	for k, v := range raw {
+		if strings.HasPrefix(k, "x-") && !knownExtensionKeys[k] {
+			var val any
+			if err := json.Unmarshal(v, &val); err != nil {
+				return err
+			}
+			extra[k] = val
+			delete(raw, k)
+		}
+	}
+	data2, err := json.Marshal(raw)
+	if err != nil {
+		return err
+	}
+	type schemaAlias Schema
+	alias := (*schemaAlias)(s)
+	if err := json.Unmarshal(data2, alias); err != nil {
+		return err
+	}
+	if len(extra) > 0 {
+		s.ExtraExtensions = extra
+	}
+	return nil
 }
 
 // generateMetadata generates metadata for the Schema and its children.

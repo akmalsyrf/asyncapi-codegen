@@ -17,6 +17,10 @@ type Extensions struct {
 	// Controls whether to include omitempty in JSON tags
 	// If false, omitempty will be removed from JSON tags even if the field can be null
 	ExtOmitEmpty *bool `json:"x-omitempty"`
+
+	// ExtraExtensions holds any other x-* extension keys from the spec (e.g. x-custom-tag).
+	// Used when generating code so custom extensions can be emitted as struct tags or comments.
+	ExtraExtensions map[string]any `json:"-"`
 }
 
 // GoTypeImportExtension specifies the required import statement
