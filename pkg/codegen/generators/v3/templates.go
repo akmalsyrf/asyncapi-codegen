@@ -6,8 +6,8 @@ import (
 	"path"
 	"text/template"
 
-	"github.com/lerenn/asyncapi-codegen/pkg/codegen/generators/v3/templates"
-	templateutil "github.com/lerenn/asyncapi-codegen/pkg/utils/template"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/codegen/generators/v3/templates"
+	templateutil "github.com/akmalsyrf/asyncapi-codegen/pkg/utils/template"
 )
 
 const (

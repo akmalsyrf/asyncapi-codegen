@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/lerenn/asyncapi-codegen/pkg/asyncapi"
-	"github.com/lerenn/asyncapi-codegen/pkg/utils"
-	"github.com/lerenn/asyncapi-codegen/pkg/utils/template"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/asyncapi"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/utils"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/utils/template"
 )
 
 // SchemaType is a structure that represents the type of a field.

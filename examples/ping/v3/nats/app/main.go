@@ -5,11 +5,11 @@ package main
 import (
 	"context"
 
-	"github.com/lerenn/asyncapi-codegen/examples"
-	"github.com/lerenn/asyncapi-codegen/pkg/extensions/brokers/nats"
-	"github.com/lerenn/asyncapi-codegen/pkg/extensions/loggers"
-	"github.com/lerenn/asyncapi-codegen/pkg/extensions/middlewares"
-	testutil "github.com/lerenn/asyncapi-codegen/pkg/utils/test"
+	"github.com/akmalsyrf/asyncapi-codegen/examples"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/extensions/brokers/nats"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/extensions/loggers"
+	"github.com/akmalsyrf/asyncapi-codegen/pkg/extensions/middlewares"
+	testutil "github.com/akmalsyrf/asyncapi-codegen/pkg/utils/test"
 )
 
 var _ AppSubscriber = (*Subscriber)(nil)
