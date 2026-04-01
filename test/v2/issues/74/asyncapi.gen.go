@@ -447,7 +447,9 @@ func (e *Error) Error() string {
 }
 
 // TestMessagePayload is a schema from the AsyncAPI specification required in messages
-type TestMessagePayload TestSchema
+// NOTE: union types (anyOf/oneOf) are generated as json.RawMessage.
+// This matches common OpenAPI generator behavior and keeps the codegen stable.
+type TestMessagePayload json.RawMessage
 
 // TestMessage is the message expected for 'TestMessage' channel.
 // NOTE: test message

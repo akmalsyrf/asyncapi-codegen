@@ -510,7 +510,9 @@ type ColliderSchema struct {
 }
 
 // ShapePropertyFromColliderSchema is a schema from the AsyncAPI specification required in messages
-type ShapePropertyFromColliderSchema SphereSchema
+// NOTE: union types (anyOf/oneOf) are generated as json.RawMessage.
+// This matches common OpenAPI generator behavior and keeps the codegen stable.
+type ShapePropertyFromColliderSchema json.RawMessage
 
 // ColliderDictionarySchema is a schema from the AsyncAPI specification required in messages
 type ColliderDictionarySchema struct {

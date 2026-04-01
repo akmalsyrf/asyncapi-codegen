@@ -124,24 +124,14 @@ type TestPayloadSchema struct {
 }
 
 // TestPayloadSchemaUnion is a schema from the AsyncAPI specification required in messages
-type TestPayloadSchemaUnion struct {
-	// WARNING: only one of the following field can be used
-
-	// AnyOf0
-	AnyOf0 *string
-	// AnyOf1
-	AnyOf1 *int64
-}
+// NOTE: union types (anyOf/oneOf) are generated as json.RawMessage.
+// This matches common OpenAPI generator behavior and keeps the codegen stable.
+type TestPayloadSchemaUnion json.RawMessage
 
 // UnionSchema is a schema from the AsyncAPI specification required in messages
-type UnionSchema struct {
-	// WARNING: only one of the following field can be used
-
-	// AnyOf0
-	AnyOf0 *string
-	// AnyOf1
-	AnyOf1 *int64
-}
+// NOTE: union types (anyOf/oneOf) are generated as json.RawMessage.
+// This matches common OpenAPI generator behavior and keeps the codegen stable.
+type UnionSchema json.RawMessage
 
 const (
 	// TestChannelPath is the constant representing the 'TestChannel' channel path.

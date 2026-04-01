@@ -23,6 +23,13 @@ func NewSuite() *Suite {
 
 func (suite *Suite) TestMarshalAndUnmarshalRoundtrip() {
 	f := float32(66.66)
+	shape := SphereSchema{
+		Radius:    10.0,
+		ShapeType: "sphere",
+	}
+	shapeJSON, err := json.Marshal(shape)
+	suite.Require().NoError(err)
+
 	// Create an original schema with additional properties
 	original := ColliderDictionarySchema{
 		AdditionalProperties: map[string]ColliderSchema{
@@ -32,10 +39,8 @@ func (suite *Suite) TestMarshalAndUnmarshalRoundtrip() {
 					Position:    &Vector3dSchema{1.1, 2.2, 3.3},
 					Orientation: &Vector3dSchema{4.4, 5.5, 6.6, 7.7},
 				},
-				Shape: ShapePropertyFromColliderSchema{
-					Radius:    10.0,
-					ShapeType: "sphere",
-				},
+				// oneOf is represented as raw JSON (union type).
+				Shape: ShapePropertyFromColliderSchema(shapeJSON),
 			},
 		},
 	}

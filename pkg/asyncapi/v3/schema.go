@@ -91,6 +91,15 @@ var knownExtensionKeys = map[string]bool{
 // UnmarshalJSON implements json.Unmarshaler so that any x-* key not in Extensions
 // is stored in ExtraExtensions and can be used during code generation.
 func (s *Schema) UnmarshalJSON(data []byte) error {
+	// JSON Schema allows boolean schemas (true/false). Treat them as an "empty" schema for codegen purposes.
+	// - true: allows any instance
+	// - false: allows no instance (we still accept it to avoid hard-failing parsing)
+	var boolSchema bool
+	if err := json.Unmarshal(data, &boolSchema); err == nil {
+		*s = NewSchema()
+		return nil
+	}
+
 	var raw map[string]json.RawMessage
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err

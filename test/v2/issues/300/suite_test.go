@@ -17,8 +17,8 @@ func TestOpenObject_IsMap(t *testing.T) {
 }
 
 func TestOneOf_Generated(t *testing.T) {
-	var u UnionSchema
-	s := "abc"
-	u.AnyOf0 = &s
-	require.NotNil(t, u.AnyOf0)
+	// oneOf is represented as raw JSON (union type).
+	// It should compile and be assignable.
+	u := UnionSchema(`"abc"`)
+	require.NotEmpty(t, u)
 }
