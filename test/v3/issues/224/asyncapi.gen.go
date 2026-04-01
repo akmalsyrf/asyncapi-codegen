@@ -510,10 +510,7 @@ type ColliderSchema struct {
 }
 
 // ShapePropertyFromColliderSchema is a schema from the AsyncAPI specification required in messages
-type ShapePropertyFromColliderSchema struct {
-	Radius    float64 `json:"radius"`
-	ShapeType string  `json:"shape_type" validate:"oneof='sphere'"`
-}
+type ShapePropertyFromColliderSchema SphereSchema
 
 // ColliderDictionarySchema is a schema from the AsyncAPI specification required in messages
 type ColliderDictionarySchema struct {

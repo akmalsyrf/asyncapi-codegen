@@ -75,7 +75,7 @@ type HeadersFromType1Message struct {
 }
 
 // Type1MessagePayload is a schema from the AsyncAPI specification required in messages
-type Type1MessagePayload struct{}
+type Type1MessagePayload map[string]any
 
 // Type1Message is the message expected for 'Type1Message' channel.
 type Type1Message struct {
@@ -149,7 +149,7 @@ type HeadersFromType2Message struct {
 }
 
 // Type2MessagePayload is a schema from the AsyncAPI specification required in messages
-type Type2MessagePayload struct{}
+type Type2MessagePayload map[string]any
 
 // Type2Message is the message expected for 'Type2Message' channel.
 type Type2Message struct {

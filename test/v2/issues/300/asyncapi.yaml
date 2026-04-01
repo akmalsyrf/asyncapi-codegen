@@ -1,0 +1,34 @@
+asyncapi: 2.6.0
+info:
+  title: Open Object + OneOf Test
+  version: 1.0.0
+
+channels:
+  test.channel:
+    subscribe:
+      message:
+        payload:
+          $ref: '#/components/schemas/TestPayload'
+
+components:
+  schemas:
+    TestPayload:
+      type: object
+      properties:
+        open:
+          $ref: '#/components/schemas/OpenObject'
+        union:
+          $ref: '#/components/schemas/Union'
+      required: [open, union]
+
+    # OpenObject: object with no properties and no explicit additionalProperties.
+    # In JSON Schema, additionalProperties defaults to true; we model that as map[string]any.
+    OpenObject:
+      type: object
+      properties: {}
+
+    # Union: oneOf union should be generatable (template previously referenced a missing template).
+    Union:
+      oneOf:
+        - type: string
+        - type: integer

@@ -49,24 +49,6 @@ float64
 // WARNING: no generation occured here as it has unknown type '{{.Type}}'
 {{- end -}}
 
-{{- /* ------------------------- AnyOf or OneOf ------------------------- */ -}}
-{{- else if or .AnyOf .OneOf -}}
-{{$xxxOf := $.AnyOf}}{{- if .OneOf }}{{$xxxOf = $.OneOf}}{{end -}}
-
-struct {
-    {{- if .OneOf }}
-    // WARNING: only one of the following field can be used
-    {{ end }}
-
-{{- range  $key, $value := $xxxOf}}
-    // {{ if $value.Reference}}{{ .ReferenceTo.Name }}{{else}}AnyOf{{$key}}{{end}}
-{{- if $value.Description}}
-    // Description: {{multiLineComment $value.Description}}
-{{- end}}
-    {{ if $value.Reference}}{{ .ReferenceTo.Name }}{{else}}AnyOf{{$key}}{{end}} *{{template "schema" $value}}
-{{end -}}
-}
-
 {{- /* ---------------------------- Reference --------------------------- */ -}}
 {{- else if .ReferenceTo -}}
 {{ namify .Follow.Name }}

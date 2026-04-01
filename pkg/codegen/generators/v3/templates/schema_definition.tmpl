@@ -5,9 +5,42 @@
 // Description: {{multiLineComment .Description}}
 {{end -}}
 
-{{- /* ----------------------------- Object ----------------------------- */ -}}
-{{- if eq .Type "object" -}}
+{{- /* ------------------------- AnyOf or OneOf ------------------------- */ -}}
+{{- if or .AnyOf .OneOf -}}
+{{$xxxOf := .AnyOf}}{{- if .OneOf }}{{$xxxOf = .OneOf}}{{end -}}
 
+{{- /* If there is only one option, alias to it */ -}}
+{{- if eq (len $xxxOf) 1 -}}
+
+type {{ namify .Name }} {{template "schema-name" (index $xxxOf 0)}}
+
+{{- else -}}
+
+type {{ namify .Name }} struct {
+    {{- if .OneOf }}
+    // WARNING: only one of the following field can be used
+    {{ end }}
+
+    {{- range  $key, $value := $xxxOf}}
+    // {{ if $value.Reference}}{{ $value.ReferenceTo.Name }}{{else}}AnyOf{{$key}}{{end}}
+    {{ if $value.Reference}}{{ $value.ReferenceTo.Name }}{{else}}AnyOf{{$key}}{{end}} *{{template "schema-name" $value}}
+    {{- end}}
+}
+
+{{- end -}}
+
+{{- /* ----------------------------- Object ----------------------------- */ -}}
+{{- else if eq .Type "object" -}}
+
+{{- /* --------------------------- Open Object -------------------------- */ -}}
+{{- if and (eq (len .Properties) 0) (not .AdditionalProperties) -}}
+
+type {{ namify .Name }} map[string]any
+
+{{- /* ------------------------- Regular Object ------------------------- */ -}}
+{{- else -}}
+
+{{- /* --------------------------- Open Object -------------------------- */ -}}
 type {{ namify .Name }} struct {
     {{- range $key, $value := .Properties -}}
     {{if $value.Description}}
@@ -28,6 +61,8 @@ type {{ namify .Name }} struct {
 {{- if .AdditionalProperties}}
     {{template "marshaling-additional-properties" .}}
 {{- end}}
+
+{{- end -}}
 
 {{- /* ----------------------------- Others ----------------------------- */ -}}
 {{- else -}}

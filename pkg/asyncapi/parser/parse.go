@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/ghodss/yaml"
 	"github.com/akmalsyrf/asyncapi-codegen/pkg/asyncapi"
 	asyncapiv2 "github.com/akmalsyrf/asyncapi-codegen/pkg/asyncapi/v2"
 	asyncapiv3 "github.com/akmalsyrf/asyncapi-codegen/pkg/asyncapi/v3"
 	"github.com/akmalsyrf/asyncapi-codegen/pkg/extensions"
+	"github.com/ghodss/yaml"
 )
 
 var (
